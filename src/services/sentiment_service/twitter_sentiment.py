@@ -45,11 +45,7 @@ class TwitterSentiment:
         model_path = self.get_tokenizer_path(model, is_local, task)
         if(model=="roberta-base"):
             return AutoTokenizer.from_pretrained(model_path)
-            # FinBERT model fine-tuned on 10,000 manually annotated (positive, negative, neutral) sentences from analyst reports.
-            # https://huggingface.co/yiyanghkust/finbert-tone 
         elif(model=="finbert-tone"):
-            # Roberta setup
-            # https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment
             return BertTokenizer.from_pretrained(model_path)
 
     def generate_labels(self, task: str) -> list:
