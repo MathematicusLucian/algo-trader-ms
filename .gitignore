@@ -1,4 +1,6 @@
 /cardiffnlp
+/yiyanghkust
+/llm_models
 **/model.safetensors
 node_modules/
 react-ui/node_modules/
