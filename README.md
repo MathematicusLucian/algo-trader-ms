@@ -2,8 +2,7 @@
 
 ## Twitter Sentiment Analysis
 
-`main.py`
-
+CLI: `main.py`
 - `--f`: Set to True if wish to use FinBERT model rather than Roberta.
 
 Sample output:

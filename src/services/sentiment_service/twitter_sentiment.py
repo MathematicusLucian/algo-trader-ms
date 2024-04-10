@@ -6,7 +6,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, TFAu
 import numpy as np
 from scipy.special import softmax
 
-class TwitterSentiment:
+class XSentimentService:
     def __init__(self, is_financial=False):
         self.is_financial = is_financial
 
