@@ -1,1 +1,1 @@
-from .twitter_sentiment import *
+from .x_sentiment import *

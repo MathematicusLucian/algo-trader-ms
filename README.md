@@ -1,5 +1,9 @@
 # Algo-Bot
 
+## Backtseting Data
+
+***DOGE:** [Kaggle](https://www.kaggle.com/datasets/svaningelgem/crypto-currencies-daily-prices?select=DOGE.csv)
+
 ## Twitter Sentiment Analysis
 
 CLI: `main.py`

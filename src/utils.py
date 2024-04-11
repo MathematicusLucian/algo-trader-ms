@@ -1,7 +1,7 @@
 import sys
 import os
-from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv())
+from dotenv import main
+main.load_dotenv(main.find_dotenv())
 
 def is_arg(arg_str: str) -> bool:
     for i, arg in enumerate(sys.argv):
