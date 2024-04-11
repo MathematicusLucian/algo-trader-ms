@@ -5,6 +5,7 @@ from torch import AnyType
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TFAutoModelForSequenceClassification, BertTokenizer, BertForSequenceClassification, pipeline
 import numpy as np
 from scipy.special import softmax
+from src.utils import get_root_dir
 
 class XSentimentService:
     def __init__(self, is_financial=False):
@@ -35,8 +36,7 @@ class XSentimentService:
 
     def get_tokenizer_path(self, model, is_local: bool, task: str) -> str:
         if is_local:
-            ROOT_DIR = os.path.abspath(os.curdir)
-            llm_model = os.path.join(ROOT_DIR, f"cardiffnlp/twitter-roberta-base-{task}")
+            llm_model = os.path.join(get_root_dir(), f"cardiffnlp/twitter-roberta-base-{task}")
         else:
             llm_model = 'yiyanghkust/finbert-tone' if model=="finbert-tone" else f"cardiffnlp/twitter-roberta-base-{task}"
         return llm_model

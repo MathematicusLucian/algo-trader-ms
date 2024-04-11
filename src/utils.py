@@ -11,3 +11,6 @@ def is_arg(arg_str: str) -> bool:
 
 def get_envar(envar_name: str) -> str:
     return os.environ.get(envar_name)
+
+def get_root_dir():
+    return os.path.abspath(os.curdir)
