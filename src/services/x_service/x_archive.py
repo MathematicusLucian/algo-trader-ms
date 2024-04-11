@@ -27,9 +27,10 @@ class XArchive:
         return df.tail(days)
     
     def get_range_between_dates(self, df, date_from, date_to):
-        return df.loc[date_from:date_to]
+        df['date'] = pd.to_datetime(df['date'])
+        return df[(df['date'] >= date_from) & (df['date'] < date_to)]
     
     def get_historic_data_by_currency(self, handle, currency, date_from, date_to):
-        df = self.fetch_tweets_archive_data(handle)
-        tweets = self.get_range_between_dates(df, date_from, date_to)
-        return tweets[tweets["tweet"].str.contains(currency)].reset_index(drop=True)
+        tweets_df = self.fetch_tweets_archive_data(handle)
+        tweets_df = self.get_range_between_dates(tweets_df, date_from, date_to)
+        return tweets_df[tweets_df["tweet"].astype(str).str.contains(currency)].reset_index(drop=True)
