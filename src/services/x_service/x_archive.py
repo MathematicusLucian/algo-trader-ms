@@ -34,3 +34,7 @@ class XArchive:
         tweets_df = self.fetch_tweets_archive_data(handle)
         tweets_df = self.get_range_between_dates(tweets_df, date_from, date_to)
         return tweets_df[tweets_df["tweet"].astype(str).str.contains(currency)].reset_index(drop=True)
+    
+    def convert_tweet_date_to_str(self, tweets):
+        tweets["date"] = tweets["date"].astype(str).apply(lambda x: datetime.fromisoformat(x).timestamp())
+        return tweets
