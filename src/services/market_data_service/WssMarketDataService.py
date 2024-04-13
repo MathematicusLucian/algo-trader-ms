@@ -1,10 +1,9 @@
 import threading
 from typing import Dict, List
 import time
-from okx_market_maker import order_books
-from okx_market_maker.market_data_service.model.OrderBook import OrderBook, OrderBookLevel
-from okx.websocket.WsPublic import WsPublic
-
+from okx.websocket.WsPublicAsync import WsPublic
+from src import order_books
+from src.services.market_data_service.model.OrderBook import OrderBook, OrderBookLevel
 
 class WssMarketDataService(WsPublic):
     def __init__(self, url, inst_id, channel="books5"):
@@ -34,7 +33,6 @@ class WssMarketDataService(WsPublic):
         args.append(books5_sub)
         return args
 
-
 def _callback(message):
     arg = message.get("arg")
     # print(message)
@@ -45,7 +43,6 @@ def _callback(message):
     if arg.get("channel") in ["books5", "books", "bbo-tbt", "books50-l2-tbt", "books-l2-tbt"]:
         on_orderbook_snapshot_or_update(message)
         # print(order_books)
-
 
 def on_orderbook_snapshot_or_update(message):
     """
@@ -157,7 +154,6 @@ class ChecksumThread(threading.Thread):
             except KeyboardInterrupt:
                 break
 
-
 if __name__ == "__main__":
     # url = "wss://ws.okx.com:8443/ws/v5/public"
     url = "wss://ws.okx.com:8443/ws/v5/public?brokerId=9999"
@@ -167,4 +163,3 @@ if __name__ == "__main__":
     check_sum = ChecksumThread(market_data_service)
     check_sum.start()
     time.sleep(30)
-

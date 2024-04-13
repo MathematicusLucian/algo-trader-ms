@@ -1,15 +1,12 @@
 import time
 from typing import List, Dict
 import copy
-
-from okx_market_maker.position_management_service.model.BalanceAndPosition import BalanceAndPosition, \
-    BalanceData, PosData
-from okx_market_maker.position_management_service.model.Account import Account, AccountDetail
-from okx_market_maker.position_management_service.model.Positions import Position, Positions
-from okx.websocket.WsPrivate import WsPrivate
-from okx_market_maker import balance_and_position_container, account_container, positions_container
-from okx_market_maker.settings import API_KEY, API_KEY_SECRET, API_PASSPHRASE
-
+from okx.websocket.WsPrivateAsync import WsPrivate
+from src.services.position_management_service.model.BalanceAndPosition import BalanceAndPosition, BalanceData, PosData
+from src.services.position_management_service.model.Account import Account, AccountDetail
+from src.services.position_management_service.model.Positions import Position, Positions
+from src import balance_and_position_container, account_container, positions_container
+from settings import API_KEY, API_KEY_SECRET, API_PASSPHRASE
 
 class WssPositionManagementService(WsPrivate):
     def __init__(self, url: str, api_key: str = API_KEY, passphrase: str = API_PASSPHRASE,
@@ -46,7 +43,6 @@ class WssPositionManagementService(WsPrivate):
         args.append(balance_and_position_sub)
         return args
 
-
 def _callback(message):
     arg = message.get("arg")
     # print(message)
@@ -66,13 +62,11 @@ def _callback(message):
         on_position(message)
         # print(positions_container)
 
-
 def on_balance_and_position(message):
     if not balance_and_position_container:
         balance_and_position_container.append(BalanceAndPosition.init_from_json(message))
     else:
         balance_and_position_container[0].update_from_json(message)
-
 
 def on_account(message):
     if not account_container:
@@ -80,13 +74,11 @@ def on_account(message):
     else:
         account_container[0].update_from_json(message)
 
-
 def on_position(message):
     if not positions_container:
         positions_container.append(Positions.init_from_json(message))
     else:
         positions_container[0].update_from_json(message)
-
 
 if __name__ == "__main__":
     url = "wss://ws.okx.com:8443/ws/v5/private"

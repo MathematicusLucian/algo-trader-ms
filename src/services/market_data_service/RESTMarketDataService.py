@@ -2,16 +2,14 @@ import logging
 import threading
 import time
 import traceback
-
 from okx.exceptions import OkxAPIException, OkxParamsException, OkxRequestException
 from okx.MarketData import MarketAPI
 from okx.PublicData import PublicAPI
-from okx_market_maker.market_data_service.model.MarkPx import MarkPxCache
-from okx_market_maker.settings import IS_PAPER_TRADING
-from okx_market_maker import tickers_container, mark_px_container
-from okx_market_maker.market_data_service.model.Tickers import Tickers
-from okx_market_maker.utils.OkxEnum import InstType
-
+from src.services.market_data_service.model.MarkPx import MarkPxCache
+from settings import IS_PAPER_TRADING
+from src import tickers_container, mark_px_container
+from src.services.market_data_service.model.Tickers import Tickers
+from src.utils.OkxEnum import InstType
 
 class RESTMarketDataService(threading.Thread):
     def __init__(self, is_paper_trading=IS_PAPER_TRADING):
@@ -44,7 +42,6 @@ class RESTMarketDataService(threading.Thread):
             except (OkxAPIException, OkxParamsException, OkxRequestException):
                 logging.warning(traceback.format_exc())
                 time.sleep(10)
-
 
 if __name__ == "__main__":
     rest_mds = RESTMarketDataService()

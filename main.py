@@ -7,13 +7,14 @@ from matplotlib.offsetbox import AnnotationBbox, OffsetImage
 from src.services.sentiment_service import XSentimentService
 from src.services.x_service import XArchive
 from src.services.crypto_analysis import *
+from src.strategy.SampleMM import SampleMM
 from src.utils import *
 
 class color:
     BOLD = '\033[1m' + '\033[93m'
     END = '\033[0m'
 
-if __name__ == "__main__":
+def tweets_impact_on_crypto():
     # run = wandb.init(project='bitcoin-musk', name='bitcoin_analysis')
     # is_financial = is_arg("--f")
     date_from = "2016-07-01"
@@ -50,3 +51,7 @@ if __name__ == "__main__":
     # tweet_content = sentiment_determinator.get_tweets()
     # sentiment = sentiment_determinator.determine_sentiment(tweet_content)
     # sentiment_determinator.print_sentiment(sentiment)
+
+if __name__ == "__main__":
+    strategy = SampleMM()
+    strategy.run()

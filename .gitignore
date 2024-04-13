@@ -1,3 +1,5 @@
+/wandb
+/wandb/*
 /cardiffnlp
 /yiyanghkust
 /llm_models
@@ -90,7 +92,7 @@ twint/storage/mysql.py
 # Node Dependency directories
 node_modules/
 jspm_packages/
-tests/
+
 # Distribution / packaging
 .Python
 env/

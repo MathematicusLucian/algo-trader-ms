@@ -1,12 +1,10 @@
 import json
 import time
 from typing import List, Dict
-
-from okx_market_maker.order_management_service.model.Order import Order, Orders
-from okx.websocket.WsPrivate import WsPrivate
-from okx_market_maker import orders_container
-from okx_market_maker.settings import API_KEY, API_KEY_SECRET, API_PASSPHRASE
-
+from okx.websocket.WsPrivateAsync import WsPrivate
+from src.services.order_management_service.model.Order import Order, Orders
+from src import orders_container
+from settings import API_KEY, API_KEY_SECRET, API_PASSPHRASE
 
 class WssOrderManagementService(WsPrivate):
     def __init__(self, url: str, api_key: str = API_KEY, passphrase: str = API_PASSPHRASE,
@@ -36,7 +34,6 @@ class WssOrderManagementService(WsPrivate):
         args.append(orders_sub)
         return args
 
-
 def _callback(message):
     arg = message.get("arg")
     # print(message)
@@ -48,13 +45,11 @@ def _callback(message):
         on_orders_update(message)
         # print(orders_container)
 
-
 def on_orders_update(message):
     if not orders_container:
         orders_container.append(Orders.init_from_json(message))
     else:
         orders_container[0].update_from_json(message)
-
 
 if __name__ == "__main__":
     # url = "wss://ws.okx.com:8443/ws/v5/private"
