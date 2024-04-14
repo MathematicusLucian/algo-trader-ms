@@ -21,7 +21,7 @@ class RESTMarketDataService(threading.Thread):
         if not mark_px_container:
             mark_px_container.append(MarkPxCache())
 
-    def run(self) -> None:
+    async def run(self) -> None:
         while 1:
             try:
                 json_response = self.market_api.get_tickers(instType=InstType.SPOT.value)
@@ -43,6 +43,6 @@ class RESTMarketDataService(threading.Thread):
                 logging.warning(traceback.format_exc())
                 time.sleep(10)
 
-if __name__ == "__main__":
-    rest_mds = RESTMarketDataService()
-    rest_mds.start()
+# if __name__ == "__main__":
+#     rest_mds = RESTMarketDataService()
+#     rest_mds.start()

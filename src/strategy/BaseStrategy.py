@@ -381,14 +381,14 @@ class BaseStrategy(ABC):
         if account_config.get("code") == '0':
             self._account_mode = AccountConfigMode(int(account_config.get("data")[0]['acctLv']))
 
-    def _run_exchange_connection(self):
-        self.mds.start()
-        self.oms.start()
-        self.pms.start()
+    async def _run_exchange_connection(self):
+        await self.mds.start()
+        # self.oms.start()
+        # self.pms.start()
         self.rest_mds.start()
-        self.mds.run_service()
-        self.oms.run_service()
-        self.pms.run_service()
+        await self.mds.run_service()
+        # self.oms.run_service()
+        # self.pms.run_service()
 
     def trading_instrument_type(self) -> InstType:
         guessed_inst_type = InstrumentUtil.get_inst_type_from_inst_id(TRADING_INSTRUMENT_ID)
@@ -409,41 +409,41 @@ class BaseStrategy(ABC):
         self._strategy_measurement = StrategyMeasurement(trading_instrument=trading_instrument,
                                                          trading_instrument_type=trading_instrument_type)
 
-    def run(self):
+    async def run(self):
         self._set_account_config()
         self.trading_instrument_type = self.trading_instrument_type()
         InstrumentUtil.get_instrument(TRADING_INSTRUMENT_ID, self.trading_instrument_type)
         self.set_strategy_measurement(trading_instrument=TRADING_INSTRUMENT_ID,
                                       trading_instrument_type=self.trading_instrument_type)
-        self._run_exchange_connection()
-        while 1:
-            try:
-                exchange_normal = self.check_status()
-                if not exchange_normal:
-                    raise ValueError("There is a ongoing maintenance in OKX.")
-                self.get_params()
-                result = self._health_check()
-                self.risk_summary()
-                if not result:
-                    print(f"Health Check result is {result}")
-                    time.sleep(5)
-                    continue
-                # summary
-                self._update_strategy_order_status()
-                place_order_list, amend_order_list, cancel_order_list = self.order_operation_decision()
-                # print(place_order_list)
-                # print(amend_order_list)
-                # print(cancel_order_list)
+        await self._run_exchange_connection()
+        # while 1:
+        #     try:
+        #         exchange_normal = self.check_status()
+        #         if not exchange_normal:
+        #             raise ValueError("There is a ongoing maintenance in OKX.")
+        #         self.get_params()
+        #         result = self._health_check()
+        #         self.risk_summary()
+        #         if not result:
+        #             print(f"Health Check result is {result}")
+        #             time.sleep(5)
+        #             continue
+        #         # summary
+        #         self._update_strategy_order_status()
+        #         place_order_list, amend_order_list, cancel_order_list = self.order_operation_decision()
+        #         # print(place_order_list)
+        #         # print(amend_order_list)
+        #         # print(cancel_order_list)
 
-                self.place_orders(place_order_list)
-                self.amend_orders(amend_order_list)
-                self.cancel_orders(cancel_order_list)
+        #         self.place_orders(place_order_list)
+        #         self.amend_orders(amend_order_list)
+        #         self.cancel_orders(cancel_order_list)
 
-                time.sleep(1)
-            except:
-                print(traceback.format_exc())
-                try:
-                    self.cancel_all()
-                except:
-                    print(f"Failed to cancel orders: {traceback.format_exc()}")
-                time.sleep(20)
+        #         time.sleep(1)
+        #     except:
+        #         print(traceback.format_exc())
+        #         try:
+        #             self.cancel_all()
+        #         except:
+        #             print(f"Failed to cancel orders: {traceback.format_exc()}")
+        #         time.sleep(20)

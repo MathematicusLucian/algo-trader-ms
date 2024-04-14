@@ -10,6 +10,8 @@
 You can generate a secret key with the following command in the terminal:
 ``python3 -c 'import secrets; print(secrets.token_urlsafe(16))``
 
+``http://127.0.0.1:5001/historic_values_today/USD/XAU/``
+
 ## Backtseting Data
 
 ***DOGE:** [Kaggle](https://www.kaggle.com/datasets/svaningelgem/crypto-currencies-daily-prices?select=DOGE.csv)

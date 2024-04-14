@@ -1,23 +1,32 @@
-import threading
-from typing import Dict, List
 import time
+from typing import Dict, List
+import asyncio
+import threading
 from okx.websocket.WsPublicAsync import WsPublicAsync
 from src import order_books
 from src.services.market_data_service.model.OrderBook import OrderBook, OrderBookLevel
 
 class WssMarketDataService(WsPublicAsync):
     def __init__(self, url, inst_id, channel="books5"):
+        try:
+            self.loop = asyncio.get_event_loop()
+        except RuntimeError as e:
+            if str(e).startswith('There is no current event loop in thread'):
+                self.loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(self.loop)
+            else:
+                raise
         super().__init__(url)
         self.inst_id = inst_id
         self.channel = channel
-        order_books[self.inst_id] = OrderBook(inst_id=inst_id)
+        # order_books[self.inst_id] = OrderBook(inst_id=inst_id)
         self.args = []
 
-    def run_service(self):
+    async def run_service(self):
         args = self._prepare_args()
         print(args)
         print("subscribing")
-        self.subscribe(args, _callback)
+        await self.subscribe(args, _callback)
         self.args += args
 
     def stop_service(self):
@@ -153,13 +162,3 @@ class ChecksumThread(threading.Thread):
                 time.sleep(5)
             except KeyboardInterrupt:
                 break
-
-if __name__ == "__main__":
-    # url = "wss://ws.okx.com:8443/ws/v5/public"
-    url = "wss://ws.okx.com:8443/ws/v5/public?brokerId=9999"
-    market_data_service = WssMarketDataService(url=url, inst_id="BTC-USDT-SWAP", channel="books")
-    market_data_service.start()
-    market_data_service.run_service()
-    check_sum = ChecksumThread(market_data_service)
-    check_sum.start()
-    time.sleep(30)

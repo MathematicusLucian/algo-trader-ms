@@ -2,8 +2,11 @@ import sys, os
 from markupsafe import escape
 import json
 import random
+import time
 from datetime import datetime
 import pytz
+import threading
+import traceback
 from flask import abort, app, Blueprint, jsonify, redirect, render_template, request, url_for
 from pandas import Timestamp
 import wandb
@@ -11,6 +14,11 @@ import wandb
 # import matplotlib.pyplot as plt
 # from matplotlib.offsetbox import AnnotationBbox, OffsetImage
 # import seaborn as sns
+# import logging
+from okx.exceptions import OkxAPIException, OkxParamsException, OkxRequestException
+from okx.MarketData import MarketAPI
+from okx.PublicData import PublicAPI
+# from src.services.market_data_service.WssMarketDataService import ChecksumThread, WssMarketDataService
 from src.services.metals_data_service.gold_prices import fetch_gold_price
 # from src.services.sentiment_service import XSentimentService
 # from src.services.x_service import XArchive, x_unofficial
@@ -33,27 +41,30 @@ algo_blueprint = Blueprint('blah', __name__)
 @algo_blueprint.route("/")
 def root():
     version = "v1.0.0"
-    return "Algo API: " + format(escape(version))
+    return jsonify({"Algo API" : format(escape(version))})
 
-# @algo_blueprint.route('/mm', methods=['GET'])
-# def mm():
-#     strategy = SampleMM()
-#     strategy.run()
-#     return "mm"
+@algo_blueprint.route('/historic_candlesticks__crypto/<base_curr>/<symbol>/', methods=['GET'])
+async def historic_candlesticks__crypto(base_curr, symbol):
+    is_paper_trading=False
+    market_api = MarketAPI(flag='0' if not is_paper_trading else '1', debug=False)
+    instrID = f"{base_curr}-{symbol}-SWAP"
+    return jsonify(market_api.get_history_candlesticks(instrID))
+
+# strategy = SampleMM()
+# # run = await strategy.run()
+# # url = "wss://ws.okx.com:8443/ws/v5/public"
+# # url = "wss://ws.okx.com:8443/ws/v5/public?brokerId=9999"
+# # market_data_service = WssMarketDataService(url=url, inst_id="BTC-USDT-SWAP", channel="books")
+# # await market_data_service.start()
+# # await market_data_service.run_service()
+# # check_sum = ChecksumThread(market_data_service)
+# # print("check_sum",check_sum)
+# # check_sum.start()
+# # print(market_data_service)
 
 # http://127.0.0.1:5001/historic_values_today/USD/XAU/
 @algo_blueprint.route('/historic_values_today/<base_curr>/<symbol>/', methods=['GET'])
 def historic_values(base_curr, symbol):
-    # today_timestamp = datetime.now().timestamp()
-    # today = datetime.now()
-    # iso_date = today.isoformat()
-    # iso_date_with_hash = datetime.now().isoformat('#')
-    # iso_date_with_space = today.isoformat()
-    # today_datestring = datetime.today()
-    # aware_us_central = datetime.now(pytz.timezone('US/Central'))
-    # print('US Central DateTime', aware_us_central)
-    # iso_date = aware_us_central.isoformat()
-    # print('ISO Datetime', iso_date)
     data = fetch_gold_price("", base_curr, symbol)
     # if data == None:
     #     return redirect(url_for('not_found'))
