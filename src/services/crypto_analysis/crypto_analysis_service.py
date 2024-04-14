@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import pandas as pd
 from datetime import datetime
-from src.utils import get_root_dir
+from src.utils.utils import get_root_dir
 
 def fetch_currency_archive_data(currency):
     return pd.read_csv(f"{get_root_dir()}/backtesting_data/crypto_archive/{currency}.csv")

@@ -5,7 +5,7 @@ from torch import AnyType
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TFAutoModelForSequenceClassification, BertTokenizer, BertForSequenceClassification, pipeline
 import numpy as np
 from scipy.special import softmax
-from src.utils import get_root_dir
+from src.utils.utils import get_root_dir
 
 class XSentimentService:
     def __init__(self, is_financial=False):

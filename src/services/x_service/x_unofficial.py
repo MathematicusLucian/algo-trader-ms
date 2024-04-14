@@ -1,4 +1,4 @@
-from src.services.scraping_service.twint import twint
+from src.services.scraping_service import twint
 # import twint
 # import twint.setup
 
