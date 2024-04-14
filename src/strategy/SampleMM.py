@@ -2,16 +2,13 @@ import math
 import time
 from decimal import Decimal
 from typing import Tuple, List
-
-from okx_market_maker.market_data_service.model.Instrument import Instrument
-from okx_market_maker.market_data_service.model.OrderBook import OrderBook
-from okx_market_maker.order_management_service.model.OrderRequest import PlaceOrderRequest, AmendOrderRequest, \
-    CancelOrderRequest
-from okx_market_maker.strategy.BaseStrategy import BaseStrategy, StrategyOrder, TRADING_INSTRUMENT_ID
-from okx_market_maker.utils.InstrumentUtil import InstrumentUtil
-from okx_market_maker.utils.OkxEnum import TdMode, OrderSide, OrderType, PosSide, InstType
-from okx_market_maker.utils.WsOrderUtil import get_request_uuid
-
+from src.services.market_data_service.model.Instrument import Instrument
+from src.services.market_data_service.model.OrderBook import OrderBook
+from src.services.order_management_service.model.OrderRequest import PlaceOrderRequest, AmendOrderRequest, CancelOrderRequest
+from src.strategy.BaseStrategy import BaseStrategy, StrategyOrder, TRADING_INSTRUMENT_ID
+from src.utils.InstrumentUtil import InstrumentUtil
+from src.utils.OkxEnum import TdMode, OrderSide, OrderType, PosSide, InstType
+from src.utils.WsOrderUtil import get_request_uuid
 
 class SampleMM(BaseStrategy):
     def __init__(self):

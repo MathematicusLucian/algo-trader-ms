@@ -1,11 +1,11 @@
 import threading
 from typing import Dict, List
 import time
-from okx.websocket.WsPublicAsync import WsPublic
+from okx.websocket.WsPublicAsync import WsPublicAsync
 from src import order_books
 from src.services.market_data_service.model.OrderBook import OrderBook, OrderBookLevel
 
-class WssMarketDataService(WsPublic):
+class WssMarketDataService(WsPublicAsync):
     def __init__(self, url, inst_id, channel="books5"):
         super().__init__(url)
         self.inst_id = inst_id

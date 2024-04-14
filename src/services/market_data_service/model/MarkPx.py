@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Dict
-
-from okx_market_maker.utils.OkxEnum import InstType
-
+from src.utils.OkxEnum import InstType
 
 @dataclass
 class MarkPx:
@@ -19,7 +17,6 @@ class MarkPx:
         mark_px_instance.mark_px = float(json_response.get("markPx", 0))
         mark_px_instance.ts = int(json_response.get("ts", 0))
         return mark_px_instance
-
 
 @dataclass
 class MarkPxCache:

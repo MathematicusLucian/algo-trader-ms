@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Dict
-
-from okx_market_maker.utils.OkxEnum import InstType
-
+from src.utils.OkxEnum import InstType
 
 @dataclass
 class Ticker:
@@ -81,7 +79,6 @@ class Ticker:
         self.sod_utc0 = float(json_response["sodUtc0"]) if json_response.get("sodUtc0") else 0
         self.sod_utc8 = float(json_response["sodUtc8"]) if json_response.get("sodUtc8") else 0
         self.ts = int(json_response["ts"]) if json_response.get("ts") else 0
-
 
 @dataclass
 class Tickers:

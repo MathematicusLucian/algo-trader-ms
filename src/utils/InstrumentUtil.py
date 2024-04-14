@@ -1,20 +1,16 @@
 import math
 from decimal import Decimal
-
 from okx.PublicData import PublicAPI
-
-from okx_market_maker import instruments
-from okx_market_maker.position_management_service.model.Positions import Position
-from okx_market_maker.settings import IS_PAPER_TRADING
-from okx_market_maker.utils.OkxEnum import InstType, OrderSide, InstState
-from okx_market_maker.market_data_service.model.Instrument import Instrument
-from okx_market_maker import mark_px_container
-
+from src import instruments
+from src.services.position_management_service.model.Positions import Position
+from settings import IS_PAPER_TRADING
+from src.utils.OkxEnum import InstType, OrderSide, InstState
+from src.services.market_data_service.model.Instrument import Instrument
+from src import mark_px_container
 
 INST_ID_SUGGESTION = "valid instId examples:\n"\
                      "SPOT: BTC-USDT, SWAP: BTC-USDT-SWAP, FUTURES: BTC_USDT-230630, "\
                      f"OPTION: BTC-USDT-230630-30000-C."
-
 
 class InstrumentUtil:
     public_api = PublicAPI(flag='0' if not IS_PAPER_TRADING else '1')

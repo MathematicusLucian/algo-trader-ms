@@ -1,15 +1,13 @@
 import time
 from typing import Tuple
-
-from okx_market_maker.settings import RISK_FREE_CCY_LIST
-from okx_market_maker.strategy.risk.RiskSnapshot import RiskSnapShot, AssetValueInst
-from okx_market_maker.position_management_service.model.Positions import Positions, Position
-from okx_market_maker.position_management_service.model.Account import Account
-from okx_market_maker.market_data_service.model.Tickers import Tickers
-from okx_market_maker.market_data_service.model.MarkPx import MarkPxCache
-from okx_market_maker.utils.InstrumentUtil import InstrumentUtil
-from okx_market_maker.utils.OkxEnum import InstType, CtType
-
+from settings import RISK_FREE_CCY_LIST
+from src.strategy.risk.RiskSnapshot import RiskSnapShot, AssetValueInst
+from src.services.position_management_service.model.Positions import Positions, Position
+from src.services.position_management_service.model.Account import Account
+from src.services.market_data_service.model.Tickers import Tickers
+from src.services.market_data_service.model.MarkPx import MarkPxCache
+from src.utils.InstrumentUtil import InstrumentUtil
+from src.utils.OkxEnum import InstType, CtType
 
 class RiskCalculator:
     @classmethod

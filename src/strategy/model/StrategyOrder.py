@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from okx_market_maker.utils.OkxEnum import OrderSide, OrderType
-
+from src.utils.OkxEnum import OrderSide, OrderType
 
 class StrategyOrderStatus(Enum):
     SENT = "sent"
@@ -14,7 +13,6 @@ class StrategyOrderStatus(Enum):
     FILLED = "filled"
     LIVE = "live"
     PARTIALLY_FILLED = "partially_filled"
-
 
 @dataclass
 class StrategyOrder:

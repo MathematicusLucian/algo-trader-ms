@@ -5,33 +5,31 @@ from decimal import Decimal
 from typing import List, Dict, Tuple
 import logging
 from copy import deepcopy
-
 from okx.Status import StatusAPI
-from okx_market_maker.market_data_service.model.Instrument import Instrument, InstState
-from okx_market_maker.market_data_service.model.Tickers import Tickers
-from okx_market_maker.position_management_service.model.Positions import Positions
-from okx_market_maker.strategy.params.ParamsLoader import ParamsLoader
-from okx_market_maker.utils.InstrumentUtil import InstrumentUtil
-from okx_market_maker.order_management_service.model.OrderRequest import PlaceOrderRequest, \
+from src.services.market_data_service.model.Instrument import Instrument, InstState
+from src.services.market_data_service.model.Tickers import Tickers
+from src.services.position_management_service.model.Positions import Positions
+from src.strategy.params.ParamsLoader import ParamsLoader
+from src.utils.InstrumentUtil import InstrumentUtil
+from src.services.order_management_service.model.OrderRequest import PlaceOrderRequest, \
     AmendOrderRequest, CancelOrderRequest
 from okx.Trade import TradeAPI
 from okx.Account import AccountAPI
-from okx_market_maker.settings import *
-from okx_market_maker import orders_container, order_books, account_container, positions_container, tickers_container, \
+from settings import *
+from src import orders_container, order_books, account_container, positions_container, tickers_container, \
     mark_px_container
-from okx_market_maker.strategy.model.StrategyOrder import StrategyOrder, StrategyOrderStatus
-from okx_market_maker.strategy.model.StrategyMeasurement import StrategyMeasurement
-from okx_market_maker.market_data_service.model.OrderBook import OrderBook
-from okx_market_maker.position_management_service.model.Account import Account
-from okx_market_maker.order_management_service.model.Order import Orders, Order, OrderState, OrderSide
-from okx_market_maker.strategy.risk.RiskCalculator import RiskCalculator
-from okx_market_maker.market_data_service.WssMarketDataService import WssMarketDataService
-from okx_market_maker.order_management_service.WssOrderManagementService import WssOrderManagementService
-from okx_market_maker.position_management_service.WssPositionManagementService import WssPositionManagementService
-from okx_market_maker.market_data_service.RESTMarketDataService import RESTMarketDataService
-from okx_market_maker.utils.OkxEnum import AccountConfigMode, TdMode, InstType
-from okx_market_maker.utils.TdModeUtil import TdModeUtil
-
+from src.strategy.model.StrategyOrder import StrategyOrder, StrategyOrderStatus
+from src.strategy.model.StrategyMeasurement import StrategyMeasurement
+from src.services.market_data_service.model.OrderBook import OrderBook
+from src.services.position_management_service.model.Account import Account
+from src.services.order_management_service.model.Order import Orders, Order, OrderState, OrderSide
+from src.strategy.risk.RiskCalculator import RiskCalculator
+from src.services.market_data_service.WssMarketDataService import WssMarketDataService
+from src.services.order_management_service.WssOrderManagementService import WssOrderManagementService
+from src.services.position_management_service.WssPositionManagementService import WssPositionManagementService
+from src.services.market_data_service.RESTMarketDataService import RESTMarketDataService
+from src.utils.OkxEnum import AccountConfigMode, TdMode, InstType
+from src.utils.TdModeUtil import TdModeUtil
 
 class BaseStrategy(ABC):
     trade_api: TradeAPI

@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
-from okx_market_maker.utils.OkxEnum import *
+from src.utils.OkxEnum import *
 from typing import Dict
-
 
 @dataclass
 class BalanceData:
@@ -16,7 +15,6 @@ class BalanceData:
         balance_data.cash_bal = float(json_response.get("cashBal"))
         balance_data.u_time = int(json_response.get("uTime"))
         return balance_data
-
 
 @dataclass
 class PosData:
@@ -47,7 +45,6 @@ class PosData:
         position_data.avg_px = float(json_response.get("avgPx"))
         position_data.u_time = json_response.get("uTime")
         return position_data
-
 
 @dataclass
 class BalanceAndPosition:
@@ -81,5 +78,3 @@ class BalanceAndPosition:
                 del self.positions[position.position_id]
             else:
                 self.positions[position.position_id] = position
-
-

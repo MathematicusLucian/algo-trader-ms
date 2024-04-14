@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Dict
-
-from okx_market_maker.market_data_service.model.Instrument import Instrument
-
+from src.services.market_data_service.model.Instrument import Instrument
 
 @dataclass
 class AssetValueInst:
@@ -15,7 +13,6 @@ class AssetValueInst:
     pos_ccy: str = ""
     ccy: str = ""
     margin: float = 0
-
 
 @dataclass
 class RiskSnapShot:

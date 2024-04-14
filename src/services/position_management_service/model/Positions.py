@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
-from okx_market_maker.utils.OkxEnum import *
+from src.utils.OkxEnum import *
 from typing import Dict
-
 
 @dataclass
 class Position:

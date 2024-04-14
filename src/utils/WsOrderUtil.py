@@ -1,12 +1,9 @@
 from okx.websocket.WsUtils import isNotBlankStr, getParamKey, initSubscribeSet
-from okx_market_maker.utils.OkxEnum import OrderOp
-
+from src.utils.OkxEnum import OrderOp
 import shortuuid
-
 
 def get_request_uuid(op):
     return f"{op}{str(shortuuid.uuid())}"
-
 
 def check_socket_request_params(op: str, args: list, channel_args, channel_param_map):
     if ~isNotBlankStr(op):
@@ -34,7 +31,6 @@ def check_socket_request_params(op: str, args: list, channel_args, channel_param
             channel_args[channel] = []
         channel_args[channel].append(p)
 
-
 def get_request_param_key(arg: dict) -> str:
     s = ""
     for k in arg:
@@ -42,7 +38,6 @@ def get_request_param_key(arg: dict) -> str:
             continue
         s = s + "@" + arg.get(k)
     return s
-
 
 def init_request_set(arg: dict) -> set:
     params_set = set()

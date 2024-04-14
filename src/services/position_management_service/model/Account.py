@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Dict
 
-
 @dataclass
 class AccountDetail:
     avail_bal: float = 0
@@ -56,7 +55,6 @@ class AccountDetail:
             if json_response.get("spotInUseAmt") else 0
         account_detail.iso_upl = float(json_response["isoUpl"]) if json_response.get("isoUpl") else 0
         return account_detail
-
 
 @dataclass
 class Account:

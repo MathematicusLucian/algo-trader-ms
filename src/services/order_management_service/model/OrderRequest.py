@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from okx_market_maker.utils.OkxEnum import TdMode, OrderSide, OrderType, PosSide
-
+from src.utils.OkxEnum import TdMode, OrderSide, OrderType, PosSide
 
 @dataclass
 class PlaceOrderRequest:
@@ -26,7 +25,6 @@ class PlaceOrderRequest:
             "px": '' if not self.price else str(self.price), "reduceOnly": self.reduce_only, "tgtCcy": self.tgt_ccy
         }
 
-
 @dataclass
 class AmendOrderRequest:
     inst_id: str
@@ -42,7 +40,6 @@ class AmendOrderRequest:
                 'clOrdId': self.client_order_id, 'reqId': self.req_id,
                 'newSz': '' if not self.new_size else str(self.new_size),
                 'newPx': '' if not self.new_price else str(self.new_price)}
-
 
 @dataclass
 class CancelOrderRequest:

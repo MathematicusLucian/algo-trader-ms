@@ -1,8 +1,6 @@
 import traceback
 import yaml
-
-from okx_market_maker.settings import PARAMS_PATH
-
+from settings import PARAMS_PATH
 
 class ParamsLoader:
     def __init__(self):

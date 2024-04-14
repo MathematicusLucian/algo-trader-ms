@@ -1,12 +1,12 @@
 import json
 import time
 from typing import List, Dict
-from okx.websocket.WsPrivateAsync import WsPrivate
+from okx.websocket.WsPrivateAsync import WsPrivateAsync
 from src.services.order_management_service.model.Order import Order, Orders
 from src import orders_container
 from settings import API_KEY, API_KEY_SECRET, API_PASSPHRASE
 
-class WssOrderManagementService(WsPrivate):
+class WssOrderManagementService(WsPrivateAsync):
     def __init__(self, url: str, api_key: str = API_KEY, passphrase: str = API_PASSPHRASE,
                  secret_key: str = API_KEY_SECRET, useServerTime: bool = False):
         super().__init__(api_key, passphrase, secret_key, url, useServerTime)

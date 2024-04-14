@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Dict, List
-from okx_market_maker.utils.OkxEnum import *
-
+from src.utils.OkxEnum import *
 
 @dataclass
 class Order:
@@ -82,7 +81,6 @@ class Order:
         order.trade_id = json_response.get("tradeId", "")
         order.u_time = int(json_response.get("uTime", 0))
         return order
-
 
 @dataclass
 class Orders:

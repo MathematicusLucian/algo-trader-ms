@@ -1,13 +1,11 @@
 import datetime
 from dataclasses import dataclass
 from decimal import Decimal
-
-from okx_market_maker.market_data_service.model.Tickers import Tickers
-from okx_market_maker.strategy.risk.RiskSnapshot import RiskSnapShot, AssetValueInst
-from okx_market_maker.utils.InstrumentUtil import InstrumentUtil
-from okx_market_maker.utils.OkxEnum import InstType, CtType
-from okx_market_maker import tickers_container, mark_px_container, order_books
-
+from src.services.market_data_service.model.Tickers import Tickers
+from src.strategy.risk.RiskSnapshot import RiskSnapShot, AssetValueInst
+from src.utils.InstrumentUtil import InstrumentUtil
+from src.utils.OkxEnum import InstType, CtType
+from src import tickers_container, mark_px_container, order_books
 
 @dataclass
 class StrategyMeasurement:

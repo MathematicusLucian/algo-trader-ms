@@ -1,14 +1,14 @@
 import time
 from typing import List, Dict
 import copy
-from okx.websocket.WsPrivateAsync import WsPrivate
+from okx.websocket.WsPrivateAsync import WsPrivateAsync
 from src.services.position_management_service.model.BalanceAndPosition import BalanceAndPosition, BalanceData, PosData
 from src.services.position_management_service.model.Account import Account, AccountDetail
 from src.services.position_management_service.model.Positions import Position, Positions
 from src import balance_and_position_container, account_container, positions_container
 from settings import API_KEY, API_KEY_SECRET, API_PASSPHRASE
 
-class WssPositionManagementService(WsPrivate):
+class WssPositionManagementService(WsPrivateAsync):
     def __init__(self, url: str, api_key: str = API_KEY, passphrase: str = API_PASSPHRASE,
                  secret_key: str = API_KEY_SECRET, useServerTime: bool = False):
         super().__init__(api_key, passphrase, secret_key, url, useServerTime)

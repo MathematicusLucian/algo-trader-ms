@@ -1,6 +1,5 @@
-from okx_market_maker.utils.OkxEnum import AccountConfigMode, InstType, TdMode
-from okx_market_maker.settings import TRADING_MODE
-
+from src.utils.OkxEnum import AccountConfigMode, InstType, TdMode
+from settings import TRADING_MODE
 
 class TdModeUtil:
     @classmethod

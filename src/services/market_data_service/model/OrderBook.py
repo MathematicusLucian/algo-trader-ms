@@ -2,7 +2,6 @@ from dataclasses import field, dataclass
 from typing import List
 import binascii
 
-
 @dataclass
 class OrderBookLevel:
     price: float
@@ -26,7 +25,6 @@ class OrderBookLevel:
         if not self._is_valid_operand(other):
             return NotImplemented
         return self.price == other.price
-
 
 @dataclass
 class OrderBook:
