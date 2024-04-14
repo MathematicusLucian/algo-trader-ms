@@ -1,5 +1,15 @@
 # Algo-Bot
 
+``python3 app.py --debug``
+
+``flask --app app.py --debug run -p 5001``
+<!-- --host=0.0.0.0 run  -->
+
+``gunicorn --worker-tmp-dir /dev/shm``
+
+You can generate a secret key with the following command in the terminal:
+``python3 -c 'import secrets; print(secrets.token_urlsafe(16))``
+
 ## Backtseting Data
 
 ***DOGE:** [Kaggle](https://www.kaggle.com/datasets/svaningelgem/crypto-currencies-daily-prices?select=DOGE.csv)

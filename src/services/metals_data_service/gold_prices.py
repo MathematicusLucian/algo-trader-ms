@@ -23,6 +23,7 @@ def get_historic_gold_prices(fromDate): #19000101
 
 def fetch_gold_price(date, base, symbol):
     api_key = get_envar("GOLDAPIIO_KEY")
+    date = "2024-04-14"
     url = f"https://www.goldapi.io/api/{symbol}/{base}{date}" 
     headers = {
         "x-access-token": api_key,
