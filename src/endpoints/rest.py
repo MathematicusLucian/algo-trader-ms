@@ -24,6 +24,7 @@ from okx.MarketData import MarketAPI
 from okx.PublicData import PublicAPI
 # from src.services.market_data_service.WssMarketDataService import ChecksumThread, WssMarketDataService
 from src.services.metals_data_service.gold_prices import fetch_gold_price
+from src.strategy.macd import determine_macd_crypto
 # from src.services.sentiment_service import XSentimentService
 # from src.services.x_service import XArchive, x_unofficial
 # from src.services.crypto_analysis import *
@@ -31,7 +32,7 @@ from src.services.metals_data_service.gold_prices import fetch_gold_price
 # from src.utils import *
 # from src.utils import chart_colors
 
-algo_blueprint = Blueprint('crypto_data_apis', __name__)
+algo_rest_blueprint = Blueprint('crypto_data_apis', __name__)
 
 def create_okx_api(api, is_paper_trading):
     flag='0' if not is_paper_trading else '1'
@@ -43,11 +44,11 @@ def create_okx_api(api, is_paper_trading):
 def get_root():
     return "Hello World"
 
-# @algo_blueprint.errorhandler(404)
+# @algo_rest_blueprint.errorhandler(404)
 # def not_found():
 #     return redirect(url_for('not_found'))
 
-# @algo_blueprint('/not-found')
+# @algo_rest_blueprint('/not-found')
 # def page_not_found(error):
 #     abort(404)
 
@@ -55,20 +56,29 @@ def get_root():
 # ------- ROOT -------
 # --------------------
 # http://127.0.0.1:5001/
-@algo_blueprint.route("/")
+@algo_rest_blueprint.route("/")
 # @cache.cached(timeout=60)
 def root():
     version = "v1.0.0"
     return jsonify({"Algo API" : format(escape(version))})
 
-# /// METALS ///
+# /// STRATEGIES ///
+
+# --------------------
+# ------- MACD -------
+# --------------------
+@algo_rest_blueprint.route('/macd_crypto/', methods=['GET'])
+def macd_crypto():
+    return determine_macd_crypto()
+
+# /// CRYPTO DATA ///
 
 # --------------------
 # --- CANDLESTICKS ---
 # --------------------
 # http://127.0.0.1:5001/candlesticks__crypto_spot/BTC/USD/
 # http://127.0.0.1:5001/historic_candlesticks__crypto_spot/ETH/USD/
-@algo_blueprint.route('/candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
 async def candlesticks__crypto_spot(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
@@ -76,13 +86,13 @@ async def candlesticks__crypto_spot(base_curr, symbol):
 
 # http://127.0.0.1:5001/historic_candlesticks__crypto_spot/BTC/USD/
 # http://127.0.0.1:5001/historic_candlesticks__crypto_spot/ETH/USD/
-@algo_blueprint.route('/historic_candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/historic_candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
 async def historic_candlesticks__crypto_spot(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
     return jsonify(okx_api.get_index_candlesticks(instrID))
 
-@algo_blueprint.route('/historic_candlesticks__crypto_mark_price/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/historic_candlesticks__crypto_mark_price/<base_curr>/<symbol>/', methods=['GET'])
 async def historic_candlesticks__crypto_mark_price(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
@@ -91,7 +101,7 @@ async def historic_candlesticks__crypto_mark_price(base_curr, symbol):
 # http://127.0.0.1:5001/historic_candlesticks__crypto_swap/BTC/USD/
 # http://127.0.0.1:5001/historic_candlesticks__crypto_swap/ETH/USD/
 # https://www.okx.com/docs-v5/en/#public-data-rest-api-get-index-candlesticks
-@algo_blueprint.route('/historic_candlesticks__crypto_swap/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/historic_candlesticks__crypto_swap/<base_curr>/<symbol>/', methods=['GET'])
 async def historic_candlesticks__crypto_swap(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}-SWAP"
@@ -100,7 +110,7 @@ async def historic_candlesticks__crypto_swap(base_curr, symbol):
 # --------------------
 # ---- COMPONENTS ----
 # --------------------
-@algo_blueprint.route('/index_components/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/index_components/<base_curr>/<symbol>/', methods=['GET'])
 async def index_components__crypto(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
@@ -109,7 +119,7 @@ async def index_components__crypto(base_curr, symbol):
 # --------------------
 # -- EXCHANGE RATE ---
 # --------------------
-@algo_blueprint.route('/exchange_rate/', methods=['GET'])
+@algo_rest_blueprint.route('/exchange_rate/', methods=['GET'])
 async def exchange_rate():
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     return jsonify(okx_api.get_exchange_rate())
@@ -117,13 +127,13 @@ async def exchange_rate():
 # --------------------
 # ---- ORDERBOOK -----
 # --------------------
-@algo_blueprint.route('/orderbook/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/orderbook/<base_curr>/<symbol>/', methods=['GET'])
 async def orderbook(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
     return jsonify(okx_api.get_orderbook(instrID))
 
-@algo_blueprint.route('/orderbook_basic/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/orderbook_basic/<base_curr>/<symbol>/', methods=['GET'])
 async def orderbook_basic(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
@@ -132,7 +142,7 @@ async def orderbook_basic(base_curr, symbol):
 # --------------------
 # ----- TICKER(S) ----
 # --------------------
-@algo_blueprint.route('/index_tickers/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/index_tickers/<base_curr>/<symbol>/', methods=['GET'])
 async def index_tickers(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
@@ -141,13 +151,13 @@ async def index_tickers(base_curr, symbol):
 # --------------------
 # ------ TRADES ------
 # --------------------
-@algo_blueprint.route('/trades/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/trades/<base_curr>/<symbol>/', methods=['GET'])
 async def trades(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
     return jsonify(okx_api.get_trades(instrID))
 
-@algo_blueprint.route('/history_trades/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/history_trades/<base_curr>/<symbol>/', methods=['GET'])
 async def history_trades(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
@@ -156,7 +166,7 @@ async def history_trades(base_curr, symbol):
 # --------------------
 # ------ VOLUME ------
 # --------------------
-@algo_blueprint.route('/volume/', methods=['GET'])
+@algo_rest_blueprint.route('/volume/', methods=['GET'])
 async def volume():
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     return jsonify(okx_api.get_volume())
@@ -179,14 +189,14 @@ async def volume():
 # ------ GOLD ------
 # --------------------
 # http://127.0.0.1:5001/historic_values_today/USD/XAU/
-@algo_blueprint.route('/historic_values_today/<base_curr>/<symbol>/', methods=['GET'])
+@algo_rest_blueprint.route('/historic_values_today/<base_curr>/<symbol>/', methods=['GET'])
 def historic_values(base_curr, symbol):
     data = fetch_gold_price("", base_curr, symbol)
     # if data == None:
     #     return redirect(url_for('not_found'))
     return jsonify(data)
 
-# @algo_blueprint.route('/sentiment/<is_financial>', methods=['GET'])
+# @algo_rest_blueprint.route('/sentiment/<is_financial>', methods=['GET'])
 # def sentiment(is_financial):
 #     sentiment_determinator = XSentimentService(is_financial)
 #     tweet_content = sentiment_determinator.get_tweets()
@@ -194,11 +204,11 @@ def historic_values(base_curr, symbol):
 #     # sentiment_determinator.print_sentiment(sentiment)
 #     return sentiment
 
-# # @algo_blueprint.route('/scrape_tweets', methods=['GET'])
+# # @algo_rest_blueprint.route('/scrape_tweets', methods=['GET'])
 # # def scrape_tweets():
 # #     return x_unofficial.scrape_tweets("@elonmusk")
 
-# # @algo_blueprint.route('/tweets_impact_on_crypto', methods=['GET'])
+# # @algo_rest_blueprint.route('/tweets_impact_on_crypto', methods=['GET'])
 # # def tweets_impact_on_crypto():
 # #     # run = wandb.init(project='bitcoin-musk', name='bitcoin_analysis')
 # #     # is_financial = is_arg("--f")
@@ -231,7 +241,7 @@ def historic_values(base_curr, symbol):
 # #     plt.xlabel("Time", size=20)
 # #     plt.ylabel("$ Price", size=20)
 
-# @algo_blueprint.route('/y', methods=['POST'])
+# @algo_rest_blueprint.route('/y', methods=['POST'])
 # def y():
 #  return jsonify("blah blah")
 

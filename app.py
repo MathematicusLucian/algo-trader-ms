@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request, session
 # from flask_sqlalchemy import SQLAlchemy
 # from flask_migrate import Migrate
 # from flask_mail import Mail, Message
-from src.endpoints import algo_blueprint, get_root
+from src.endpoints import get_root
 from src.services.flask_setup_service import FlaskSetupService
 
 if __name__ == '__main__':
