@@ -2,6 +2,7 @@ import sys, os
 from markupsafe import escape
 import json
 import random
+from bidict import bidict
 import time
 from datetime import datetime
 import pytz
@@ -27,6 +28,13 @@ from src.services.metals_data_service.gold_prices import fetch_gold_price
 # from src.utils import *
 # from src.utils import chart_colors
 
+def create_okx_api(api, is_paper_trading):
+    flag='0' if not is_paper_trading else '1'
+    if api=="MarketAPI":
+        return MarketAPI(flag, debug=False)
+    elif api=="PublicAPI":
+        return PublicAPI(flag, debug=False)
+
 algo_blueprint = Blueprint('blah', __name__)
 
 # @algo_blueprint.errorhandler(404)
@@ -37,37 +45,114 @@ algo_blueprint = Blueprint('blah', __name__)
 # def page_not_found(error):
 #     abort(404)
 
+# /// METALS ///
+
+# --------------------
+# ------- ROOT -------
+# --------------------
 # http://127.0.0.1:5001/
 @algo_blueprint.route("/")
 def root():
     version = "v1.0.0"
     return jsonify({"Algo API" : format(escape(version))})
 
-@algo_blueprint.route('/index_components/<base_curr>/<symbol>/', methods=['GET'])
-async def index_components__crypto(base_curr, symbol):
-    is_paper_trading=False
-    public_api = MarketAPI(flag='0' if not is_paper_trading else '1', debug=False)
+# --------------------
+# --- CANDLESTICKS ---
+# --------------------
+# http://127.0.0.1:5001/candlesticks__crypto_spot/BTC/USD/
+# http://127.0.0.1:5001/historic_candlesticks__crypto_spot/ETH/USD/
+@algo_blueprint.route('/candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
+async def candlesticks__crypto_spot(base_curr, symbol):
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
-    return jsonify(public_api.get_index_components(instrID))
+    return jsonify(okx_api.get_candlesticks(instrID))
 
 # http://127.0.0.1:5001/historic_candlesticks__crypto_spot/BTC/USD/
 # http://127.0.0.1:5001/historic_candlesticks__crypto_spot/ETH/USD/
 @algo_blueprint.route('/historic_candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
 async def historic_candlesticks__crypto_spot(base_curr, symbol):
-    is_paper_trading=False
-    public_api = MarketAPI(flag='0' if not is_paper_trading else '1', debug=False)
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
-    return jsonify(public_api.get_index_candlesticks(instrID))
+    return jsonify(okx_api.get_index_candlesticks(instrID))
+
+@algo_blueprint.route('/historic_candlesticks__crypto_mark_price/<base_curr>/<symbol>/', methods=['GET'])
+async def historic_candlesticks__crypto_mark_price(base_curr, symbol):
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    instrID = f"{base_curr}-{symbol}"
+    return jsonify(okx_api.get_mark_price_candlesticks(instrID))
 
 # http://127.0.0.1:5001/historic_candlesticks__crypto_swap/BTC/USD/
 # http://127.0.0.1:5001/historic_candlesticks__crypto_swap/ETH/USD/
 # https://www.okx.com/docs-v5/en/#public-data-rest-api-get-index-candlesticks
 @algo_blueprint.route('/historic_candlesticks__crypto_swap/<base_curr>/<symbol>/', methods=['GET'])
 async def historic_candlesticks__crypto_swap(base_curr, symbol):
-    is_paper_trading=False
-    market_api = MarketAPI(flag='0' if not is_paper_trading else '1', debug=False)
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}-SWAP"
-    return jsonify(market_api.get_history_candlesticks(instrID))
+    return jsonify(okx_api.get_history_candlesticks(instrID))
+
+# --------------------
+# ---- COMPONENTS ----
+# --------------------
+@algo_blueprint.route('/index_components/<base_curr>/<symbol>/', methods=['GET'])
+async def index_components__crypto(base_curr, symbol):
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    instrID = f"{base_curr}-{symbol}"
+    return jsonify(okx_api.get_index_components(instrID))
+
+# --------------------
+# -- EXCHANGE RATE ---
+# --------------------
+@algo_blueprint.route('/exchange_rate/', methods=['GET'])
+async def exchange_rate():
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    return jsonify(okx_api.get_exchange_rate())
+
+# --------------------
+# ---- ORDERBOOK -----
+# --------------------
+@algo_blueprint.route('/orderbook/<base_curr>/<symbol>/', methods=['GET'])
+async def orderbook(base_curr, symbol):
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    instrID = f"{base_curr}-{symbol}"
+    return jsonify(okx_api.get_orderbook(instrID))
+
+@algo_blueprint.route('/orderbook_basic/<base_curr>/<symbol>/', methods=['GET'])
+async def orderbook_basic(base_curr, symbol):
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    instrID = f"{base_curr}-{symbol}"
+    return jsonify(okx_api.get_order_lite_book(instrID))
+
+# --------------------
+# ----- TICKER(S) ----
+# --------------------
+@algo_blueprint.route('/index_tickers/<base_curr>/<symbol>/', methods=['GET'])
+async def index_tickers(base_curr, symbol):
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    instrID = f"{base_curr}-{symbol}"
+    return jsonify(okx_api.get_index_tickers(instId=instrID))
+
+# --------------------
+# ------ TRADES ------
+# --------------------
+@algo_blueprint.route('/trades/<base_curr>/<symbol>/', methods=['GET'])
+async def trades(base_curr, symbol):
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    instrID = f"{base_curr}-{symbol}"
+    return jsonify(okx_api.get_trades(instrID))
+
+@algo_blueprint.route('/history_trades/<base_curr>/<symbol>/', methods=['GET'])
+async def history_trades(base_curr, symbol):
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    instrID = f"{base_curr}-{symbol}"
+    return jsonify(okx_api.get_history_trades(instId=instrID))
+
+# --------------------
+# ------ VOLUME ------
+# --------------------
+@algo_blueprint.route('/volume/', methods=['GET'])
+async def volume():
+    okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
+    return jsonify(okx_api.get_volume())
 
 # strategy = SampleMM()
 # # run = await strategy.run()
@@ -81,6 +166,11 @@ async def historic_candlesticks__crypto_swap(base_curr, symbol):
 # # check_sum.start()
 # # print(market_data_service)
 
+# /// METALS ///
+
+# --------------------
+# ------ GOLD ------
+# --------------------
 # http://127.0.0.1:5001/historic_values_today/USD/XAU/
 @algo_blueprint.route('/historic_values_today/<base_curr>/<symbol>/', methods=['GET'])
 def historic_values(base_curr, symbol):
@@ -137,3 +227,38 @@ def historic_values(base_curr, symbol):
 # @algo_blueprint.route('/y', methods=['POST'])
 # def y():
 #  return jsonify("blah blah")
+
+REST_URL = "https://www.okx.com"
+WSS_URL = "wss://ws.okx.com:8443/ws/v5/business"
+
+# GET / Candlesticks history (https://www.okx.com/docs-v5/en/?shell#order-book-trading-market-data-get-candlesticks-history)
+# Retrieve history candlestick charts from recent years(It is last 3 months supported for 1s candlestick).
+# Rate Limit: 20 requests per 2 seconds
+# Rate limit rule: IP
+CANDLES_ENDPOINT = "/api/v5/market/history-candles"
+INTERVALS = bidict({
+    "1s": "1s",
+    "1m": "1m",
+    "3m": "3m",
+    "5m": "5m",
+    "15m": "15m",
+    "30m": "30m",
+    "1h": "1H",
+    "2h": "2H",
+    "4h": "4H",
+    "6h": "6Hutc",
+    "8h": "8Hutc",
+    "12h": "12Hutc",
+    "1d": "1Dutc",
+    "3d": "3Dutc",
+    "1w": "1Wutc",
+    "1M": "1Mutc",
+    "3M": "3Mutc"
+})
+MAX_RESULTS_PER_CANDLESTICK_REST_REQUEST = 100
+
+# Get system time (https://www.okx.com/docs-v5/en/?shell#public-data-rest-api-get-system-time)
+# Retrieve API server time.
+# Rate Limit: 10 requests per 2 seconds
+# Rate limit rule: IP
+HEALTH_CHECK_ENDPOINT = "/api/v5/public/time"
