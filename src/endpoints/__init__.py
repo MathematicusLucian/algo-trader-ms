@@ -1,1 +1,1 @@
-from .endpoints import *
+from .rest import *

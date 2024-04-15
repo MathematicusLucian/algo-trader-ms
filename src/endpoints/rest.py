@@ -3,12 +3,15 @@ from markupsafe import escape
 import json
 import random
 from bidict import bidict
+from functools import wraps
 import time
 from datetime import datetime
 import pytz
 import threading
 import traceback
 from flask import abort, app, Blueprint, jsonify, redirect, render_template, request, url_for
+# from flask_cache import Cache
+# from flask_login import current_user
 from pandas import Timestamp
 import wandb
 # import matplotlib as mpl
@@ -28,14 +31,17 @@ from src.services.metals_data_service.gold_prices import fetch_gold_price
 # from src.utils import *
 # from src.utils import chart_colors
 
+algo_blueprint = Blueprint('crypto_data_apis', __name__)
+
 def create_okx_api(api, is_paper_trading):
     flag='0' if not is_paper_trading else '1'
     if api=="MarketAPI":
         return MarketAPI(flag, debug=False)
     elif api=="PublicAPI":
         return PublicAPI(flag, debug=False)
-
-algo_blueprint = Blueprint('blah', __name__)
+    
+def get_root():
+    return "Hello World"
 
 # @algo_blueprint.errorhandler(404)
 # def not_found():
@@ -45,16 +51,17 @@ algo_blueprint = Blueprint('blah', __name__)
 # def page_not_found(error):
 #     abort(404)
 
-# /// METALS ///
-
 # --------------------
 # ------- ROOT -------
 # --------------------
 # http://127.0.0.1:5001/
 @algo_blueprint.route("/")
+# @cache.cached(timeout=60)
 def root():
     version = "v1.0.0"
     return jsonify({"Algo API" : format(escape(version))})
+
+# /// METALS ///
 
 # --------------------
 # --- CANDLESTICKS ---
