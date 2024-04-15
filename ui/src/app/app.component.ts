@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { DeepPartial, TimeChartOptions, ColorType, createChart } from 'lightweight-charts';
 import { map } from 'rxjs/operators';
-import { ChartDataService } from './chart-data.service';
+import { ChartDataService } from './services/chart-data/chart-data.service';
 import * as LightweightCharts from 'lightweight-charts';
 import { SeriesMarker } from 'lightweight-charts';
 // import time from lightweight-charts
@@ -21,6 +21,7 @@ import { IonicModule } from '@ionic/angular';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, AfterViewInit {
+  title: string = "AlgoTrading";
   pairs: string[] = [];
   confidences: { [key: string]: string } = {}; // Object to hold confidence values
   lastTimestamps: { [key: string]: string } = {}; // Object to hold the last timestamp for each pair

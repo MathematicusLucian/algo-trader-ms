@@ -62,6 +62,27 @@ def root():
     version = "v1.0.0"
     return jsonify({"Algo API" : format(escape(version))})
 
+@algo_rest_blueprint.route("/2000")
+def fetch_2000():
+    with open('api_sample_data/user.json') as user_file:
+        file_contents = user_file.read()
+    parsed_json = json.loads(file_contents)
+    return jsonify(parsed_json)
+
+@algo_rest_blueprint.route("/audusd15m")
+def fetch_audusd15m():
+    with open('api_sample_data/audusd15m.json') as user_file:
+        file_contents = user_file.read()
+    parsed_json = json.loads(file_contents)
+    return jsonify(parsed_json)
+
+@algo_rest_blueprint.route("/audusd15m_")
+def fetch_audusd15m_():
+    with open('api_sample_data/audusd15m_.json') as user_file:
+        file_contents = user_file.read()
+    parsed_json = json.loads(file_contents)
+    return jsonify(parsed_json)
+
 # /// STRATEGIES ///
 
 # --------------------
