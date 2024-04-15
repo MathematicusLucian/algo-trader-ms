@@ -1,0 +1,21 @@
+csv_file: scraped.csv
+spreadsheet: scraped.xlsx
+cache_folder: cache
+block_list_file: block_list.json
+duplicates_list_file: duplicates_list.json
+log_file: log.log
+search:
+  providers:
+    - INDEED
+    - MONSTER
+    - GLASSDOOR
+    - CWJOBS
+  province_or_state: "Greater London"
+  city: "London"  
+  radius: 50  # miles
+  keywords:
+    - Python
+  max_listing_days: 1
+  company_block_list:
+  remoteness: 3
+log_level: INFO

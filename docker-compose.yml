@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  job_hunter_nginx:
+    container_name: job_hunter_nginx_container
+    restart: always
+    image: nginx
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    volumes:
+     - ./ui/dist:/usr/share/nginx/html
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - job_hunter_flask
+
+  job_hunter_flask:
+    container_name: job_hunter_flask_container
+    restart: always
+    image: flask
+    build: ./job_application__flask
+    volumes:
+     - ./job_application__flask:/usr/src/app/job_application__flask
+    env_file:
+     - .env
