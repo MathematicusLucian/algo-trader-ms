@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  job_hunter_nginx:
-    container_name: job_hunter_nginx_container
+  algo_nginx:
+    container_name: algo_nginx_container
     restart: always
     image: nginx
     build:
@@ -14,14 +14,14 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - job_hunter_flask
+      - algo_flask
 
-  job_hunter_flask:
-    container_name: job_hunter_flask_container
+  algo_flask:
+    container_name: algo_flask_container
     restart: always
     image: flask
-    build: ./job_application__flask
+    build: ./algo_flask
     volumes:
-     - ./job_application__flask:/usr/src/app/job_application__flask
+     - ./algo_flask:/usr/src/app/algo_flask
     env_file:
-     - .env
+     - ./algo_flask/.env

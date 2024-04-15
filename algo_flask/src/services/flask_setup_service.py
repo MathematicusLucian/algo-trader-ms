@@ -4,9 +4,15 @@ from src.endpoints.rest import algo_rest_blueprint
 from src.endpoints.websockets import socketio
 # https://github.com/miguelgrinberg/Flask-SocketIO-Chat
 # https://medium.com/hackervalleystudio/weekend-project-part-2-turning-flask-into-a-real-time-websocket-server-using-flask-socketio-ab6b45f1d896
-from flask import Blueprint, Flask, flash, redirect, url_for
-# from flask_login import current_user
-from flask_sock import Sock
+
+# Scraper = scrape_job_sites_bot
+# save_dataframe = save_dataframe
+# create_connection = create_connection
+# is_table = is_table
+
+# flask_config = get_config('FLASK_CONFIG')
+# config = flask_config if flask_config!=None else 'default'
+# application = create_app_blueprint(config)
 
 class FlaskSetupService(object):
 

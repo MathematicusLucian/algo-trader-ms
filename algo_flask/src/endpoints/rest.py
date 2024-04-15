@@ -55,7 +55,7 @@ def get_root():
 # --------------------
 # ------- ROOT -------
 # --------------------
-# http://127.0.0.1:5001/
+# http://127.0.0.1:5000/
 @algo_rest_blueprint.route("/")
 # @cache.cached(timeout=60)
 def root():
@@ -97,16 +97,16 @@ def macd_crypto():
 # --------------------
 # --- CANDLESTICKS ---
 # --------------------
-# http://127.0.0.1:5001/candlesticks__crypto_spot/BTC/USD/
-# http://127.0.0.1:5001/historic_candlesticks__crypto_spot/ETH/USD/
+# http://127.0.0.1:5000/candlesticks__crypto_spot/BTC/USD/
+# http://127.0.0.1:5000/historic_candlesticks__crypto_spot/ETH/USD/
 @algo_rest_blueprint.route('/candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
 async def candlesticks__crypto_spot(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
     instrID = f"{base_curr}-{symbol}"
     return jsonify(okx_api.get_candlesticks(instrID))
 
-# http://127.0.0.1:5001/historic_candlesticks__crypto_spot/BTC/USD/
-# http://127.0.0.1:5001/historic_candlesticks__crypto_spot/ETH/USD/
+# http://127.0.0.1:5000/historic_candlesticks__crypto_spot/BTC/USD/
+# http://127.0.0.1:5000/historic_candlesticks__crypto_spot/ETH/USD/
 @algo_rest_blueprint.route('/historic_candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
 async def historic_candlesticks__crypto_spot(base_curr, symbol):
     okx_api = create_okx_api("MarketAPI", is_paper_trading=False)
@@ -119,8 +119,8 @@ async def historic_candlesticks__crypto_mark_price(base_curr, symbol):
     instrID = f"{base_curr}-{symbol}"
     return jsonify(okx_api.get_mark_price_candlesticks(instrID))
 
-# http://127.0.0.1:5001/historic_candlesticks__crypto_swap/BTC/USD/
-# http://127.0.0.1:5001/historic_candlesticks__crypto_swap/ETH/USD/
+# http://127.0.0.1:5000/historic_candlesticks__crypto_swap/BTC/USD/
+# http://127.0.0.1:5000/historic_candlesticks__crypto_swap/ETH/USD/
 # https://www.okx.com/docs-v5/en/#public-data-rest-api-get-index-candlesticks
 @algo_rest_blueprint.route('/historic_candlesticks__crypto_swap/<base_curr>/<symbol>/', methods=['GET'])
 async def historic_candlesticks__crypto_swap(base_curr, symbol):
@@ -209,7 +209,7 @@ async def volume():
 # --------------------
 # ------ GOLD ------
 # --------------------
-# http://127.0.0.1:5001/historic_values_today/USD/XAU/
+# http://127.0.0.1:5000/historic_values_today/USD/XAU/
 @algo_rest_blueprint.route('/historic_values_today/<base_curr>/<symbol>/', methods=['GET'])
 def historic_values(base_curr, symbol):
     data = fetch_gold_price("", base_curr, symbol)

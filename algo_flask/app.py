@@ -11,4 +11,4 @@ if __name__ == '__main__':
     flask_setup = Flask(__name__, instance_relative_config=True)
     app = FlaskSetupService(flask_setup, test_config=None)
     app.add_endpoint('/', 'root', get_root, methods=['GET'])
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5000)

@@ -1,21 +1,72 @@
 # Algo-Bot
 
-``python3 app.py --debug``
+## Run
+**NB. Setup the UI before Docker Compose**: 
+[Angular Prerequisites] (https://github.com/angular/angular-cli#prerequisites) - that being, Docker, node, npm and angular-cli.
+- Navigate to the `ui` directory. 
+- Execute `ng build`; and with `--prod` to create a production build for Angular.
 
-``flask --app app.py --debug run -p 5001``
-<!-- --host=0.0.0.0 run  -->
+**Running Docker Compose:**
+There are two Docker containers:
+- Flask/Uwsgi - Flask web application with _uwsgi_ 
+- Angular/Nginx - Angular web client
 
-``gunicorn --worker-tmp-dir /dev/shm``
+Both built using separate Dockerfiles, created and connected with Docker Compose, and which expand upon the respective official images from Docker Hub.
 
-You can generate a secret key with the following command in the terminal:
-``python3 -c 'import secrets; print(secrets.token_urlsafe(16))``
+***Execute following commands:***
+  - ``docker-compose -f docker-compose.yml up --build``
+  - Without cache ``docker-compose build --no-cache``
 
-## UI
-`` python3 -m http.server 9000 ``
+***Open Browser and type following URLs:***
+  - `localhost` - the welcome message from Angular and a backend default message.
+  - `localhost/api` - the welcome message from Flask.
+  - `localhost/api/ping` - sample `json` from Flask.
 
+Details:
+- External requests hit the _nginx_ web server's port 80, and the response is by Angular or Flask depending on the URL. 
+- _/api_ is sent to Flask docker container (port 5000; as per the _nginx.conf_ file. nginx is aware of both the Angular and Flask services.) 
+- Flask container connects via port 1234 to the database.
+
+### Cleaning
+
+Prune Docker regularly:
+
+- ``docker system prune``
+- ``docker rmi $(docker images | awk '/^<none>/ {print $3}')``
+
+## Env
+- Create: ``python3 -m venv venv``
+- Active: ``source venv/bin/activate``
+- ***Requirements:***``pip freeze -r requirements.txt | sed '/freeze/,$ d'``
+
+## Tests
+
+### Running the Python Tests
+- Flask (Python) unit tests are in the `server/tests` directory and managed by `manage .py` Python file.
+- Run with: ``docker-compose -f docker-compose.yml run --rm algo_flask python manage.py test``
+
+### Running UI unit tests
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Architecture
+
+### Docker
+  - Docker Compose to build and host app: ```docker-compose.yml``` to create containers and run the app. Several versions, i.e. for different environments.
+  - Reverse proxy (`nginx`) - web server, and reverse proxy. External user hits the nginx - distributes request to UI or 
+
+### Microservice (Python)
+***Flask*** app: including tests setup, configs and settings files, Dockerfile for running the Flask container, etc..
+  - Flask - Back-End Python framework.
+  - ```.env``` variable: Environment variables for Flask and SQLite3. Several versions, i.e. for different environments.
+  - Optimised for large scale app structure, with `Blueprints`, `application factory` and several configs that can be extended from this seed project to any Prod-ready app.
+  - uwsgi - WSGI server - direct support for popular NGINX web 
+  - Flask code Testing.
+
+### UI (TypeScript)
+***Angular:*** Front-End JavaScript framework.
 ## APIs
 
-``http://127.0.0.1:5001/historic_values_today/USD/XAU/``
+``http://127.0.0.1:5000/historic_values_today/USD/XAU/``
 
 https://search.r-project.org/CRAN/refmans/okxAPI/html/get_history_candles.html
 https://www.okx.com/help/how-can-i-do-spot-trading-with-the-jupyter-notebook
@@ -48,31 +99,3 @@ Sample output:
 
 ### FinBERT (Financial Roberta)
 ***Finbert Tone:*** Fine-tuned on 10,000 manually annotated (positive, negative, neutral) sentences from analyst reports. [https://huggingface.co/yiyanghkust/finbert-tone](https://huggingface.co/yiyanghkust/finbert-tone)
-
-# AlgoUi
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.8.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
