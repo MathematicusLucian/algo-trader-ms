@@ -43,6 +43,13 @@ def root():
     version = "v1.0.0"
     return jsonify({"Algo API" : format(escape(version))})
 
+@algo_blueprint.route('/index_components/<base_curr>/<symbol>/', methods=['GET'])
+async def index_components__crypto(base_curr, symbol):
+    is_paper_trading=False
+    public_api = MarketAPI(flag='0' if not is_paper_trading else '1', debug=False)
+    instrID = f"{base_curr}-{symbol}"
+    return jsonify(public_api.get_index_components(instrID))
+
 # http://127.0.0.1:5001/historic_candlesticks__crypto_spot/BTC/USD/
 # http://127.0.0.1:5001/historic_candlesticks__crypto_spot/ETH/USD/
 @algo_blueprint.route('/historic_candlesticks__crypto_spot/<base_curr>/<symbol>/', methods=['GET'])
