@@ -22,10 +22,10 @@ RISK_FREE_CCY_LIST = ["USDT", "USDC", "DAI"]
 PARAMS_PATH = os.path.abspath(os.path.dirname(__file__) + "/params.yaml")
 
 class Config(object):
-    APPNAME = 'JobHunter Flask API'
+    APPNAME = 'Algo Flask API'
     SUPPORT_EMAIL = ''
     VERSION = '1.0.0'
-    APPID = 'job_hunter_ng_docker'
+    APPID = 'algo_ng_docker'
     SECRET_KEY = os.urandom(24)
     TESTING = False
 

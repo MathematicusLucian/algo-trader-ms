@@ -25,9 +25,6 @@ import { appConfig } from './app/app.config';
 import 'zone.js';
 import './polyfills';
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
-
 if (environment.production) {
   enableProdMode();
 }
@@ -38,6 +35,8 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 //   {path: 'admin', loadComponent: () => import('./admin/panel.component').then(mod => mod.AdminPanelComponent)},
 // ];
 
+// bootstrapApplication(AppComponent, appConfig)
+//   .catch((err) => console.error(err));
 bootstrapApplication(AppComponent, {
     providers: [
         // {

@@ -20,8 +20,8 @@ services:
     container_name: algo_flask_container
     restart: always
     image: flask
-    build: ./algo_flask
+    build: ./flask_service
     volumes:
-     - ./algo_flask:/usr/src/app/algo_flask
+     - ./flask_service:/usr/src/app/algo_flask
     env_file:
-     - ./algo_flask/.env
+     - ./flask_service/.env

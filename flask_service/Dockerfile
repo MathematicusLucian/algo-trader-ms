@@ -7,8 +7,6 @@ RUN chmod 777 /usr/src/app
 RUN chmod 777 /usr/src/app/entrypoint.sh
 RUN apt-get update
 RUN apt-get install -y build-essential
-# RUN apt-get install -y python-dev
-# RUN apt-get install -y python3-all-dev
 RUN apt-get install -y uwsgi-plugin-python3
 RUN apt-get install -y python3-dev 
 RUN apt-get install -y gcc 
