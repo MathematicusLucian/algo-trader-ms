@@ -5,22 +5,14 @@ from src.endpoints.websockets import socketio
 # https://github.com/miguelgrinberg/Flask-SocketIO-Chat
 # https://medium.com/hackervalleystudio/weekend-project-part-2-turning-flask-into-a-real-time-websocket-server-using-flask-socketio-ab6b45f1d896
 
-# Scraper = scrape_job_sites_bot
-# save_dataframe = save_dataframe
-# create_connection = create_connection
-# is_table = is_table
-
-# flask_config = get_config('FLASK_CONFIG')
-# config = flask_config if flask_config!=None else 'default'
-# application = create_app_blueprint(config)
-
 class FlaskSetupService(object):
-
     def __init__(self, app, test_config=None, **configs):
         self.app = app
         self.configs(**configs)
 
     def configs(self, **configs):
+        # app_settings = config[config_type]
+        # self.app.config.from_object(app_settings)
         for config, value in configs:
             self.app.config[config.upper()] = value
         # if self.app.config["DEBUG"] == True:
@@ -73,3 +65,12 @@ class FlaskSetupService(object):
 
     def run(self, **kwargs):
         self.app.run(**kwargs)
+    
+# Scraper = scrape_job_sites_bot
+# save_dataframe = save_dataframe
+# create_connection = create_connection
+# is_table = is_table
+
+# flask_config = get_config('FLASK_CONFIG')
+# config = flask_config if flask_config!=None else 'default'
+# application = create_app_blueprint(config)
